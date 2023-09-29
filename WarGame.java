@@ -3,123 +3,143 @@ package ass1;
 import java.util.Random;
 
 public class WarGame {
-    private SQueue<Card> player1Hand;
-    private SQueue<Card> player1Discard;
-    private SQueue<Card> player2Hand;
-    private SQueue<Card> player2Discard;
-    private SQueue<Card> deck;
-    private int maxRounds = 1000;
-    
+    private SQueue<Card> player1Hand = new SQueue<>(53);
+    private SQueue<Card> player2Hand = new SQueue<>(53);
+    private SQueue<Card> player1Discard = new SQueue<>(53);
+    private SQueue<Card> player2Discard = new SQueue<>(53);
+    public int i;
     public WarGame() {
-        System.out.println("Welcome to the Game of War!\n");
-        // Initialize the players' hands and discard piles
-        player1Hand = new SQueue<>(52);
-        player1Discard = new SQueue<>(52);
-        player2Hand = new SQueue<>(52);
-        player2Discard = new SQueue<>(52);
-        
-        // Create and shuffle the deck
-        createDeck();
-        deck.shuffle();
-        
-        // Deal the cards to the players
-        dealCards();
-        System.out.println("\nNow dealing cards to the players\n");
-        System.out.println("Player 1's Deck:");
-        System.out.println(player1Hand);
-        System.out.println("\nPlayer 2's Deck:");
-        System.out.println(player2Hand);
-        System.out.println("\nStarting the game of WAR!");
-        System.out.println("Max number of rounds = " + maxRounds);
-    }
-    
-    private void createDeck() {
-        deck = new SQueue<>(52);
+        SQueue<Card> deck = new SQueue<>(53);
         for (Card.Suits suit : Card.Suits.values()) {
             for (Card.Ranks rank : Card.Ranks.values()) {
                 deck.enqueue(new Card(suit, rank));
             }
         }
-    }
-    
-    private void dealCards() {
-        boolean turn = true; // True for player1, False for player2
+        shuffle(deck);
+
+        // Distributing cards to both players
         while (!deck.isEmpty()) {
-            if (turn) {
-                player1Hand.enqueue(deck.dequeue());
-            } else {
+            player1Hand.enqueue(deck.dequeue());
+            if (!deck.isEmpty()) {
                 player2Hand.enqueue(deck.dequeue());
             }
-            turn = !turn; // Alternate players
         }
     }
-    
-public void playGame(int maxRounds) {
-        int rounds = 0;
-        while (rounds < maxRounds && !player1Hand.isEmpty() && !player2Hand.isEmpty()) {
-            System.out.println("\nRound " + rounds + " ");
-            Card card1 = player1Hand.dequeue();
-            Card card2 = player2Hand.dequeue();
-            
-            int comparison = card1.compareTo(card2);
-            if (comparison > 0) {
-                // Player 1 wins the round
-                player1Discard.enqueue(card1);
-                player1Discard.enqueue(card2);
-                System.out.println("Player 1 Wins: " + card1 + " beats " + card2);
-            } else if (comparison < 0) {
-                // Player 2 wins the round
-                player2Discard.enqueue(card1);
-                player2Discard.enqueue(card2);
-                System.out.println("Player 2 Wins: " + card1 + " loses to " + card2);
-            } else {
-                // WAR round
-                SQueue<Card> warPile = new SQueue<>(52);  // Temporary pile for cards in play during WAR
-                warPile.enqueue(card1);
-                warPile.enqueue(card2);
-                System.out.println("WAR: " + card1 + " ties " + card2);
-                playWarRound(warPile);
-            }
-            
-            rounds++;
-        }
-        
-        // ... End game logic to be added later ...
-    }
-    
-    private void playWarRound(SQueue<Card> warPile) {
-        while (!player1Hand.isEmpty() && !player2Hand.isEmpty()) {
-            Card card1FaceDown = player1Hand.dequeue();
-            Card card2FaceDown = player2Hand.dequeue();
-            Card card1FaceUp = player1Hand.dequeue();
-            Card card2FaceUp = player2Hand.dequeue();
 
-            warPile.enqueue(card1FaceDown);
-            warPile.enqueue(card2FaceDown);
-            warPile.enqueue(card1FaceUp);
-            warPile.enqueue(card2FaceUp);
-            System.out.println("Face down");
-            
-            int comparison = card1FaceUp.compareTo(card2FaceUp);
+    public void shuffle(SQueue<Card> deck) {
+        for (int i = 0; i < 3; i++) {
+            deck.shuffle();
+        }
+    }
+
+    public void playGame(int maxRounds) {
+        System.out.println("Starting the game of WAR!");
+        System.out.println("Max number of rounds = " + maxRounds);
+    
+        for (i = 0; i < maxRounds; i++) {
+            if (player1Hand.isEmpty() && player1Discard.isEmpty()) {
+                break;
+            } else if (player2Hand.isEmpty() && player2Discard.isEmpty()) {
+                break;
+            }
+    
+            ensureCardsInHand();
+    
+            Card player1Card = player1Hand.dequeue();
+            Card player2Card = player2Hand.dequeue();
+    
+            System.out.print("Round " + i + " ");
+    
+            int comparison = player1Card.compareTo(player2Card);
             if (comparison > 0) {
-                // Player 1 wins the WAR
+                player1Discard.enqueue(player1Card);
+                player1Discard.enqueue(player2Card);
+                System.out.println("Player 1 Wins: " + player1Card + " beats " + player2Card);
+            } else if (comparison < 0) {
+                player2Discard.enqueue(player1Card);
+                player2Discard.enqueue(player2Card);
+                System.out.println("Player 2 Wins: " + player1Card + " loses to " + player2Card);
+            } else {
+                System.out.println("WAR: " + player1Card + " ties " + player2Card);
+                i += handleWar(player1Card, player2Card);  // Adjust the counter based on the number of war rounds
+            }
+        }
+    }
+    
+    public int handleWar(Card player1Card, Card player2Card) {
+        SQueue<Card> warPile = new SQueue<>(53);
+    
+        warPile.enqueue(player1Card);
+        warPile.enqueue(player2Card);
+    
+        int roundsConsumed = 0;
+    
+        while (true) {
+            roundsConsumed++;
+    
+            ensureCardsInHand();
+    
+            if (player1Hand.isEmpty() || player2Hand.isEmpty()) {
+                break;
+            }
+    
+            Card player1FaceDown = player1Hand.dequeue();
+            Card player2FaceDown = player2Hand.dequeue();
+    
+            warPile.enqueue(player1FaceDown);
+            warPile.enqueue(player2FaceDown);
+    
+            System.out.println("Face down");
+    
+            ensureCardsInHand();
+    
+            if (player1Hand.isEmpty() || player2Hand.isEmpty()) {
+                break;
+            }
+    
+            Card player1FaceUp = player1Hand.dequeue();
+            Card player2FaceUp = player2Hand.dequeue();
+    
+            int comparison = player1FaceUp.compareTo(player2FaceUp);
+            if (comparison > 0) {
                 while (!warPile.isEmpty()) {
                     player1Discard.enqueue(warPile.dequeue());
                 }
-                System.out.println("Player 1 Wins WAR: " + card1FaceUp + " beats " + card2FaceUp);
-                }
-            else {
-                // Player 2 wins the WAR
+                i++;
+                System.out.println("Round " + i + " Player 1 Wins WAR: " + player1FaceUp + " beats " + player2FaceUp);
+                break;
+            } else if (comparison < 0) {
                 while (!warPile.isEmpty()) {
                     player2Discard.enqueue(warPile.dequeue());
                 }
-                System.out.println("Player 2 Wins WAR: " + card1FaceUp + " loses to " + card2FaceUp);
-                }
+                i++;
+                System.out.println("Round " + i + " Player 2 Wins WAR: " + player1FaceUp + " loses to " + player2FaceUp);
                 break;
-            }  
             }
-            // If tie, the loop continues and another WAR round begins
+        }
     
+        return roundsConsumed;
+    }
+    
+
+    public void ensureCardsInHand() {
+        if (player1Hand.isEmpty()) {
+            while (!player1Discard.isEmpty()) {
+                player1Hand.enqueue(player1Discard.dequeue());
+            }
+            player1Hand.shuffle();
+            System.out.println("Getting and shuffling the pile for Player 1");
+        }
+
+        if (player2Hand.isEmpty()) {
+            while (!player2Discard.isEmpty()) {
+                player2Hand.enqueue(player2Discard.dequeue());
+            }
+            player2Hand.shuffle();
+            System.out.println("Getting and shuffling the pile for Player 2");
+        }
+    }
+
     public void endGame() {
         if (player1Hand.isEmpty() && player1Discard.isEmpty()) {
             System.out.println("\nPlayer 1 is out of cards!\nPlayer 2 Wins!!");
