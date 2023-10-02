@@ -4,23 +4,23 @@ WarGame is a Java-based implementation of the classic card game "War". The game 
 
 ## Files Overview:
 
-WarGame.java: The main class that drives the game. It contains the game logic and flow.
+**WarGame.java:** The main class that drives the game. It contains the game logic and flow.
 
-Card.java: Represents a playing card with attributes like rank and suit.
+**Card.java:** Represents a playing card with attributes like rank and suit.
 
-Shufflable.java: An interface that provides a method for shuffling.
+**Shufflable.java:** An interface that provides a method for shuffling.
 
-QueueInterface.java: An interface that defines the basic operations for a queue data structure.
+**QueueInterface.java**: An interface that defines the basic operations for a queue data structure.
 
-SQueue.java: A concrete implementation of the QueueInterface, representing a static queue.
+**SQueue.java:** A concrete implementation of the QueueInterface, representing a static queue.
 
-EmptyQueueException.java: Custom exception thrown when trying to dequeue from an empty queue.
+**EmptyQueueException.java:** Custom exception thrown when trying to dequeue from an empty queue.
 
-FullQueueException.java: Custom exception thrown when trying to enqueue into a full queue.
+**FullQueueException.java:** Custom exception thrown when trying to enqueue into a full queue.
 
-Ass1NewTest.java & Ass1Test.java: Test classes to validate the functionality of the game and its components.
+**Ass1NewTest.java & Ass1Test.java:** Test classes to validate the functionality of the game and its components.
 
-CardQueueTest.java: Test class specifically for validating the queue operations related to cards.
+**CardQueueTest.java:** Test class specifically for validating the queue operations related to cards.
 
 ## How to Play:
     1. Compile all the Java files.
