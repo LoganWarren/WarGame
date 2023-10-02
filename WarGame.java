@@ -3,16 +3,18 @@ package ass1;
 import java.util.Random;
 
 public class WarGame {
+    static long seed = 12312311;
     private SQueue<Card> player1Hand = new SQueue<>(53);
     private SQueue<Card> player2Hand = new SQueue<>(53);
     private SQueue<Card> player1Discard = new SQueue<>(53);
     private SQueue<Card> player2Discard = new SQueue<>(53);
     public int i;
+
     public WarGame() {
         SQueue<Card> deck = new SQueue<>(53);
         for (Card.Suits suit : Card.Suits.values()) {
             for (Card.Ranks rank : Card.Ranks.values()) {
-                deck.enqueue(new Card(suit, rank));
+                deck.enqueue(new Card(suit, rank)); //Adds all cards to the deck
             }
         }
         shuffle(deck);
@@ -155,7 +157,7 @@ public class WarGame {
     }
 
     public static void main(String[] args) {
-        int maxRounds = 1000;  // Default number of rounds
+        int maxRounds = 1000; 
         if (args.length > 0) {
             try {
                 maxRounds = Integer.parseInt(args[0]);

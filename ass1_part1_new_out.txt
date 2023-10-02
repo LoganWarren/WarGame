@@ -1,0 +1,64 @@
+=================================
+Testing circular array
+=================================
+created an empty queue with 3 slots
+Queue after adding element  0
+SQueue: the array [0, null, null, null] Capacity:4 Size:1 Read:0 Write:1
+Queue after adding element  1
+SQueue: the array [0, 1, null, null] Capacity:4 Size:2 Read:0 Write:2
+Queue after adding element  2
+SQueue: the array [0, 1, 2, null] Capacity:4 Size:3 Read:0 Write:3
+Queue after dequeing element: 0
+SQueue: the array [null, 1, 2, null] Capacity:4 Size:2 Read:1 Write:3
+Queue after adding element  3
+SQueue: the array [null, 1, 2, 3] Capacity:4 Size:3 Read:1 Write:0
+Queue after dequeing element: 1
+SQueue: the array [null, null, 2, 3] Capacity:4 Size:2 Read:2 Write:0
+Queue after adding element  4
+SQueue: the array [4, null, 2, 3] Capacity:4 Size:3 Read:2 Write:1
+Queue after dequeing element: 2
+SQueue: the array [4, null, null, 3] Capacity:4 Size:2 Read:3 Write:1
+Queue after adding element  5
+SQueue: the array [4, 5, null, 3] Capacity:4 Size:3 Read:3 Write:2
+
+=================================
+Testing enqueue, exception, and one empty slot
+=================================
+ERROR: Cannot add element 6 The queue is full.
+Is the queue full? true
+
+=================================
+Testing dequeue and exception. Is empty and isFull
+=================================
+Queue after dequeing element: 3
+SQueue: the array [4, 5, null, null] Capacity:4 Size:2 Read:0 Write:2
+Queue after dequeing element: 4
+SQueue: the array [null, 5, null, null] Capacity:4 Size:1 Read:1 Write:2
+Queue after dequeing element: 5
+SQueue: the array [null, null, null, null] Capacity:4 Size:0 Read:2 Write:2
+ERROR: The queue is empty.
+Is the queue full? false
+Is the queue empty? true
+
+=================================
+Testing clear
+=================================
+Queue before clear
+SQueue: the array [Item 0, Item 1, Item 2, null] Capacity:4 Size:3 Read:0 Write:3
+
+Queue after clear
+SQueue: the array [null, null, null, null] Capacity:4 Size:0 Read:0 Write:0
+Is the queue full? false
+Is the queue empty? true
+
+=================================
+Testing Shufflable Interface (your results dont need to be identical)
+=================================
+About to test shuffle method...
+SQueue: the array [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, null] Capacity:11 Size:10 Read:0 Write:10
+Shuffling...
+SQueue: the array [9, 7, 3, 1, 5, 2, 8, 4, 6, 0, null] Capacity:11 Size:10 Read:0 Write:10
+Removing 2 elements and adding 2
+SQueue: the array [33, null, 3, 1, 5, 2, 8, 4, 6, 0, 22] Capacity:11 Size:10 Read:2 Write:1
+Shuffling again...
+SQueue: the array [33, null, 3, 22, 6, 4, 2, 8, 1, 5, 0] Capacity:11 Size:10 Read:2 Write:1
